@@ -29,15 +29,17 @@ BLOCK
 
 #si option --create
 if [ "$1" == "--create" ];then
-    echo "notre option est --create "
+    
     nb_machine=1
     re='^[0-9]+$'
     if [[ $2 =~ $re  &&  "$2" > 0 ]]; then #double crocher obligatoire pour re
-        echo "est un nombre"
         [ "$2" != "" ] && nb_machine=$2
+        echo "Création de ${nb_machine} conteneur(s)."
 
-        docker run -tid --name $USER-alpine alpine:latest
-
+        for i in $(seq 1 $nb_machine);do
+            docker run -tid --name $USER-alpine-$i alpine:latest
+            echo "Conteneur $USER-alpine-$i créé."
+        done
         echo "nombre de container créé : ${nb_machine}"
     fi
 
@@ -47,8 +49,9 @@ elif [ "$1" == "--start" ];then
 
 #si option --drop
 elif [ "$1" == "--drop" ];then
-    echo "option --drop"
-    docker rm -f $USER-alpine
+    echo "Suppression du/des containeur(s)..."
+    docker rm -f $(docker ps -a | grep $USER-alpine | awk '{print $1}')
+    echo "fin de la suppression du/des containeur(s)."
 
 #si option --infos
 elif [ "$1" == "--infos" ];then
