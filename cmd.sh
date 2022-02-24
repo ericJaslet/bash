@@ -12,7 +12,6 @@
 myvar="Eric"
 myage=44
 
-echo "$#"
 read -d '' options <<"BLOCK"
 Options :
     - --create : lancer des conteneurs
@@ -53,7 +52,7 @@ if [ "$1" == "--create" ];then
 
 #si option --start
 elif [ "$1" == "--start" ];then
-    echo "option --start"
+    docker start $(docker ps -a | grep $USER-alpine | awk '{print $1}')
 
 #si option --drop
 elif [ "$1" == "--drop" ];then
@@ -63,7 +62,12 @@ elif [ "$1" == "--drop" ];then
 
 #si option --infos
 elif [ "$1" == "--infos" ];then
-    echo "github dépot Eric jaslet"
+    echo "github dépot Eric jaslet : $(git config --get remote.origin.url)"
+    listeDocker=docker ps -a | grep $USER-alpine | awk '{print $1}'
+    
+    for containeur in $(docker ps -a | grep $USER-alpine | awk '{print $1}');do
+        docker inspect --format=' => {{.Name}} - {{.NetworkSettings.IPAddress }}' $containeur
+    done
 
 #si option --ansible
 elif [ "$1" == "--ansible" ];then
