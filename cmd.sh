@@ -36,10 +36,15 @@ if [ "$1" == "--create" ];then
         [ "$2" != "" ] && nb_machine=$2
         echo "Création de ${nb_machine} conteneur(s)."
 
-        # Récupération de l'id max
-        idmax = `docker ps -a --format '{{ .Names }}' | awk -F "-" -v user=$USER '$0 ~ user"-alpine" {print $3}' | sort -r | head -1`
+        # Récupération de l'id max des containeur
+        idmax=`docker ps -a --format '{{ .Names }}' | awk -F "-" -v user=$USER '$0 ~ user"-alpine" {print $3}' | sort -r | head -1`
 
-        for i in $(seq 1 $nb_machine);do
+        min=1
+        max=0
+
+        min=$(($idmax + 1))
+        max=$(($idmax + $nb_machine))
+        for i in $(seq $min $max);do
             docker run -tid --name $USER-alpine-$i alpine:latest
             echo "Conteneur $USER-alpine-$i créé."
         done
@@ -58,7 +63,7 @@ elif [ "$1" == "--drop" ];then
 
 #si option --infos
 elif [ "$1" == "--infos" ];then
-    echo "github depot Eric jaslet"
+    echo "github dépot Eric jaslet"
 
 #si option --ansible
 elif [ "$1" == "--ansible" ];then
