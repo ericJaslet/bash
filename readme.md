@@ -4,4 +4,6 @@
 * chown -R name:group <folder>
 * en sudo git add + git push
 
-linux bash up
+linux bash
+
+for pull
