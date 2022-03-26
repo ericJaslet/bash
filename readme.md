@@ -6,4 +6,4 @@
 
 linux bash
 
-for pull
+up key
