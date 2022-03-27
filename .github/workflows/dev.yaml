@@ -13,4 +13,4 @@ jobs:
       
       - name: one
         run: 
-          pwd
+          echo "dev"
